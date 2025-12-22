@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { DrawerContentScrollView } from "@react-navigation/drawer";
 import { Ionicons } from "@expo/vector-icons";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
@@ -6,6 +7,10 @@ import { Drawer } from "expo-router/drawer";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import "../global.css";
+import { useRevenueCatInit } from "../src/hooks/useRevenueCatInit";
+import { useNotificationInit } from "../src/hooks/useNotificationInit";
+import { useAuthStore } from "../src/stores/authStore";
+import { useAppStore } from "../src/stores/appStore";
 
 const client = new QueryClient({
   defaultOptions: {
@@ -43,6 +48,18 @@ const RootLayout = () => {
   const currentScreen = segments[segments.length - 1] || "Dashboard";
   const drawerTitle = currentScreen === "(tabs)" ? "Dashboard" :
     currentScreen.charAt(0).toUpperCase() + currentScreen.slice(1);
+
+  // Initialize services
+  const { initialize: initAuth } = useAuthStore();
+  const { restoreSession } = useAppStore();
+  useRevenueCatInit();
+  useNotificationInit();
+
+  // Initialize auth and restore session on mount
+  useEffect(() => {
+    initAuth();
+    restoreSession();
+  }, [initAuth, restoreSession]);
 
   return (
     <QueryClientProvider client={client}>

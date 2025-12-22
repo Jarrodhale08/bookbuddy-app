@@ -5,6 +5,45 @@
 Last Updated: December 22, 2024
 
 ================================================================================
+FIRST: RUN DATABASE MIGRATION
+================================================================================
+
+Before testing, you MUST run the Supabase migration to create the database
+schema. The migration file is at: supabase/migrations/001_initial_schema.sql
+
+OPTION 1: Via Supabase Dashboard (Recommended)
+    1. Log into https://supabase.com/dashboard
+    2. Select project: J&H Tech | Build
+    3. Go to SQL Editor
+    4. Copy/paste contents of supabase/migrations/001_initial_schema.sql
+    5. Click "Run" to execute
+    6. Verify tables created in Table Editor
+
+OPTION 2: Via Supabase CLI
+    1. Install CLI: npm install -g supabase
+    2. Login: supabase login
+    3. Link project: supabase link --project-ref kazhissaknwmagcribxq
+    4. Run migration: supabase db push
+
+Tables that will be created:
+    - app_registry (shared)
+    - user_app_context (shared)
+    - profiles (shared)
+    - books (app-isolated)
+    - notes (app-isolated)
+    - highlights (app-isolated)
+    - reading_sessions (app-isolated)
+    - reading_streaks (app-isolated)
+    - reading_goals (app-isolated)
+    - bookshelves (app-isolated)
+    - bookshelf_items (app-isolated)
+
+All app-isolated tables have:
+    - app_id column for multi-tenant isolation
+    - RLS policies for user data protection
+    - Indexes for query performance
+
+================================================================================
 REQUIRED - Must complete before App Store/Play Store submission
 ================================================================================
 
@@ -118,11 +157,16 @@ PRODUCTION DEPLOYMENT
 ================================================================================
 
 [ ] MIGRATE TO PRODUCTION SUPABASE (after testing complete)
-    - Run migration script to copy schema to Production project
-    - Update .env with Production credentials:
-      * EXPO_PUBLIC_SUPABASE_URL=https://aweahqgyrthpdxrnzaoi.supabase.co
-      * EXPO_PUBLIC_SUPABASE_ANON_KEY=[production key]
-    - Verify RLS policies are working in Production
+    1. Run the same migration SQL on Production project:
+       - Log into Supabase dashboard
+       - Select project: J&H Tech | Production
+       - Go to SQL Editor
+       - Run supabase/migrations/001_initial_schema.sql
+    2. Update .env with Production credentials:
+       * EXPO_PUBLIC_SUPABASE_URL=https://aweahqgyrthpdxrnzaoi.supabase.co
+       * EXPO_PUBLIC_SUPABASE_ANON_KEY=[production key]
+    3. Verify RLS policies are working in Production
+    4. Configure Auth providers in Production project
 
 [ ] BUILD FOR PRODUCTION
     - iOS: npx eas build --platform ios --profile production
@@ -153,18 +197,16 @@ CURRENT STATUS
 
 + Core app functionality complete
 + Supabase backend configured (Build project)
-+ Database schema with RLS policies
-+ Push notification infrastructure
++ Database migration with full schema and RLS policies
++ Multi-tenant architecture with app_id isolation
++ Push notification infrastructure (expo-notifications)
 + RevenueCat service code integrated
 + Privacy Policy and Terms of Service
 + Open Source Licenses page
 + App icons and splash screen
-+ Book scanning with ISBN lookup
-+ Reading progress tracking
-+ Reading goals and statistics
-+ Book shelves/collections
-+ Search and filtering
-+ Social sharing functionality
++ Notification icon created
++ Auth initialization with app context
++ Sync-enabled data store
 
 ================================================================================
 PREMIUM FEATURES (Gated by Subscription)
@@ -180,12 +222,27 @@ PREMIUM FEATURES (Gated by Subscription)
 - Reading challenges
 
 ================================================================================
-NOTES
+ARCHITECTURE NOTES
 ================================================================================
 
-- The app currently points to the Supabase BUILD project for development
-- Switch to PRODUCTION credentials only for App Store builds
-- Free trial is configured for 7 days in the subscription store
-- ISBN scanning uses external book APIs for metadata
+Multi-Tenant Setup:
+- APP_ID = "bookbuddy" (set in .env)
+- All data tables have app_id column
+- database.ts auto-filters queries by app_id
+- database.ts auto-adds app_id on create/upsert
+- SHARED_TABLES (profiles, app_registry) skip app_id filter
+
+Data Flow:
+- appStore.ts is the main data store
+- Uses Supabase as primary storage
+- AsyncStorage for offline caching
+- syncAll() fetches all data on login
+- Individual CRUD operations sync immediately
+
+Auth Flow:
+- authStore.ts handles Supabase auth
+- On login/signup, calls initializeAppContext()
+- Creates user_app_context record for multi-tenant tracking
+- Creates/updates profiles record
 
 ================================================================================
