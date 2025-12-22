@@ -1,0 +1,1259 @@
+{
+  "id": "pipeline_1766016834181",
+  "startedAt": "2025-12-18T00:13:54.181Z",
+  "status": "completed",
+  "currentPhase": "completeness-audit",
+  "phases": [
+    {
+      "phase": "market-research",
+      "status": "completed",
+      "startedAt": "2025-12-18T00:13:54.191Z",
+      "completedAt": "2025-12-18T00:13:54.409Z",
+      "duration": 218
+    },
+    {
+      "phase": "design-system",
+      "status": "completed",
+      "startedAt": "2025-12-18T00:13:54.410Z",
+      "completedAt": "2025-12-18T00:18:45.266Z",
+      "duration": 290856
+    },
+    {
+      "phase": "code-generation",
+      "status": "completed",
+      "startedAt": "2025-12-18T00:18:45.289Z",
+      "completedAt": "2025-12-18T00:28:01.526Z",
+      "duration": 556237
+    },
+    {
+      "phase": "quality-assurance",
+      "status": "completed",
+      "startedAt": "2025-12-18T00:28:01.527Z",
+      "completedAt": "2025-12-18T00:28:04.985Z",
+      "duration": 3458
+    },
+    {
+      "phase": "security-audit",
+      "status": "completed",
+      "startedAt": "2025-12-18T00:28:04.985Z",
+      "completedAt": "2025-12-18T00:28:43.802Z",
+      "duration": 38817
+    },
+    {
+      "phase": "completeness-audit",
+      "status": "completed",
+      "startedAt": "2025-12-18T00:28:43.802Z",
+      "completedAt": "2025-12-18T00:28:43.823Z",
+      "duration": 21
+    },
+    {
+      "phase": "code-generation",
+      "status": "completed",
+      "startedAt": "2025-12-18T00:28:43.846Z",
+      "completedAt": "2025-12-18T00:38:21.166Z",
+      "duration": 577320
+    },
+    {
+      "phase": "quality-assurance",
+      "status": "completed",
+      "startedAt": "2025-12-18T00:38:21.167Z",
+      "completedAt": "2025-12-18T00:38:23.629Z",
+      "duration": 2462
+    },
+    {
+      "phase": "security-audit",
+      "status": "completed",
+      "startedAt": "2025-12-18T00:38:23.630Z",
+      "completedAt": "2025-12-18T00:39:06.635Z",
+      "duration": 43005
+    },
+    {
+      "phase": "completeness-audit",
+      "status": "completed",
+      "startedAt": "2025-12-18T00:39:06.635Z",
+      "completedAt": "2025-12-18T00:39:06.649Z",
+      "duration": 14
+    }
+  ],
+  "errors": [
+    {
+      "phase": "quality-assurance",
+      "message": "TypeScript error in C:\\Projects\\NewAgent\\output\\app_1766016834181\\src\\services\\database.ts:23: Avoid using \"any\" type",
+      "recoverable": true,
+      "timestamp": "2025-12-18T00:38:23.628Z"
+    },
+    {
+      "phase": "quality-assurance",
+      "message": "TypeScript error in C:\\Projects\\NewAgent\\output\\app_1766016834181\\src\\services\\database.ts:311: Avoid using \"any\" type",
+      "recoverable": true,
+      "timestamp": "2025-12-18T00:38:23.628Z"
+    }
+  ],
+  "outputPath": "C:\\Projects\\NewAgent\\output\\app_1766016834181",
+  "marketResearch": {
+    "appConcept": {
+      "name": "BookBuddy",
+      "tagline": "Read more, remember more",
+      "description": "Track your reading list, set yearly goals, log favorite quotes, join book clubs, and discover new reads based on your taste.",
+      "category": "education",
+      "subcategory": "Reading Tracker",
+      "keywords": [
+        "books",
+        "reading",
+        "library",
+        "quotes",
+        "book-club"
+      ],
+      "uniqueValueProposition": "Solves: Avid readers lose track of books and struggle to maintain reading habits. Read more, remember more",
+      "targetAudience": {
+        "demographics": {
+          "ageRange": "25-45",
+          "gender": "all",
+          "income": "medium",
+          "location": [
+            "United States",
+            "Europe"
+          ]
+        },
+        "psychographics": {
+          "interests": [
+            "books",
+            "reading"
+          ],
+          "painPoints": [
+            "Avid readers lose track of books and struggle to maintain reading habits"
+          ],
+          "goals": [
+            "Solve the problem",
+            "Better experience"
+          ]
+        },
+        "marketSize": {
+          "tam": 50000000,
+          "sam": 10000000,
+          "som": 500000
+        }
+      },
+      "coreFeatures": [
+        {
+          "name": "Content Library",
+          "description": "Browse and access learning materials",
+          "priority": "must-have",
+          "complexity": "medium",
+          "screens": [
+            "LibraryScreen",
+            "ContentScreen"
+          ],
+          "dataRequirements": [
+            "content"
+          ]
+        },
+        {
+          "name": "Progress Tracking",
+          "description": "Track learning progress and streaks",
+          "priority": "must-have",
+          "complexity": "medium",
+          "screens": [
+            "ProgressScreen"
+          ],
+          "dataRequirements": [
+            "progress"
+          ]
+        },
+        {
+          "name": "Notes & Highlights",
+          "description": "Save and organize learning notes",
+          "priority": "should-have",
+          "complexity": "medium",
+          "screens": [
+            "NotesScreen"
+          ],
+          "dataRequirements": [
+            "notes"
+          ]
+        },
+        {
+          "name": "Reminders",
+          "description": "Study reminders and scheduling",
+          "priority": "should-have",
+          "complexity": "low",
+          "screens": [
+            "SettingsScreen"
+          ],
+          "dataRequirements": [
+            "reminders"
+          ]
+        }
+      ],
+      "premiumFeatures": [
+        {
+          "name": "Offline Mode",
+          "description": "Download content for offline access",
+          "priority": "nice-to-have",
+          "complexity": "high",
+          "screens": [
+            "DownloadsScreen"
+          ],
+          "dataRequirements": [
+            "downloads"
+          ]
+        },
+        {
+          "name": "Certificates",
+          "description": "Earn certificates for completed courses",
+          "priority": "nice-to-have",
+          "complexity": "medium",
+          "screens": [
+            "CertificatesScreen"
+          ],
+          "dataRequirements": [
+            "certificates"
+          ]
+        }
+      ]
+    },
+    "marketAnalysis": {
+      "trendScore": 77,
+      "demandIndicators": [
+        "Growing interest in education apps",
+        "Users seeking solutions for: Avid readers lose track of books and struggle to maintain reading habits",
+        "Increasing mobile-first behavior",
+        "Strong willingness to pay for quality apps"
+      ],
+      "seasonality": "low",
+      "growthPotential": "growing",
+      "barriers": [
+        "Established competitors",
+        "User acquisition costs",
+        "App store discoverability"
+      ],
+      "opportunities": [
+        "Underserved niche",
+        "Better UX than competitors",
+        "Mobile-native approach",
+        "Subscription model viability"
+      ]
+    },
+    "competitorAnalysis": {
+      "directCompetitors": [
+        {
+          "name": "Generic Competitor 1",
+          "downloads": "1M+",
+          "rating": 4.2,
+          "pricing": "Freemium",
+          "strengths": [
+            "Established user base",
+            "Feature rich"
+          ],
+          "weaknesses": [
+            "Complicated UI",
+            "Expensive premium"
+          ]
+        },
+        {
+          "name": "Generic Competitor 2",
+          "downloads": "500K+",
+          "rating": 4,
+          "pricing": "Free with ads",
+          "strengths": [
+            "Free tier",
+            "Simple"
+          ],
+          "weaknesses": [
+            "Limited features",
+            "Ads are intrusive"
+          ]
+        }
+      ],
+      "indirectCompetitors": [
+        {
+          "name": "Alternative Solution",
+          "downloads": "2M+",
+          "rating": 4.3,
+          "pricing": "Subscription",
+          "strengths": [
+            "Well-known brand"
+          ],
+          "weaknesses": [
+            "Not mobile-focused",
+            "Expensive"
+          ]
+        }
+      ],
+      "marketGaps": [
+        "Specific focus on: Avid readers lose track of books and struggle to maintain reading habits",
+        "Modern, clean user interface",
+        "Fair pricing for value provided",
+        "Privacy-respecting approach"
+      ],
+      "differentiators": [
+        "Read more, remember more",
+        "Purpose-built for mobile",
+        "User-centric design",
+        "Transparent pricing"
+      ]
+    },
+    "revenueProjection": {
+      "model": "freemium",
+      "pricing": {
+        "freeTier": true,
+        "premiumPrice": 6.99,
+        "subscriptionTiers": [
+          {
+            "name": "Free",
+            "price": 0,
+            "interval": "monthly",
+            "features": [
+              "Basic features",
+              "Limited usage"
+            ]
+          },
+          {
+            "name": "Pro",
+            "price": 6.99,
+            "interval": "monthly",
+            "features": [
+              "All features",
+              "No ads",
+              "Cloud sync"
+            ]
+          },
+          {
+            "name": "Pro Annual",
+            "price": 49.99,
+            "interval": "yearly",
+            "features": [
+              "All Pro features",
+              "40% savings"
+            ]
+          }
+        ]
+      },
+      "projectedMRR": 35683,
+      "projectedARR": 552684,
+      "breakEvenMonths": 8,
+      "assumptions": [
+        "3% free-to-paid conversion",
+        "5% monthly churn",
+        "Organic growth via ASO",
+        "Word-of-mouth referrals"
+      ]
+    },
+    "technicalRequirements": {
+      "platforms": [
+        "ios",
+        "android"
+      ],
+      "minimumOS": {
+        "ios": "14.0",
+        "android": "10.0"
+      },
+      "permissions": [
+        "INTERNET",
+        "NOTIFICATIONS"
+      ],
+      "thirdPartyServices": [
+        {
+          "name": "Firebase",
+          "purpose": "Authentication and analytics",
+          "required": true,
+          "alternatives": [
+            "Supabase"
+          ]
+        },
+        {
+          "name": "RevenueCat",
+          "purpose": "Subscription management",
+          "required": false,
+          "alternatives": [
+            "Stripe"
+          ]
+        }
+      ],
+      "dataStorage": "hybrid",
+      "offlineSupport": true,
+      "pushNotifications": true
+    }
+  },
+  "designSystem": {
+    "brand": {
+      "personality": [
+        "inspiring",
+        "approachable",
+        "knowledgeable"
+      ],
+      "tone": "professional",
+      "visualStyle": "modern"
+    },
+    "colors": {
+      "primary": {
+        "50": "#FEFAF2",
+        "100": "#FEF5E6",
+        "200": "#FCE6C2",
+        "300": "#FBD89D",
+        "400": "#F8BB54",
+        "500": "#F59E0B",
+        "600": "#DC8E09",
+        "700": "#C47E08",
+        "800": "#AB6E07",
+        "900": "#935E06"
+      },
+      "secondary": {
+        "50": "#F7F7F8",
+        "100": "#F0F0F2",
+        "200": "#DADBDF",
+        "300": "#C3C6CC",
+        "400": "#979CA6",
+        "500": "#6B7280",
+        "600": "#606673",
+        "700": "#555B66",
+        "800": "#4A4F59",
+        "900": "#40444C"
+      },
+      "accent": {
+        "50": "#FDF8F2",
+        "100": "#FBF1E6",
+        "200": "#F5DDC0",
+        "300": "#EFC89B",
+        "400": "#E49F50",
+        "500": "#D97706",
+        "600": "#C36B05",
+        "700": "#AD5F04",
+        "800": "#975304",
+        "900": "#824703"
+      },
+      "neutral": {
+        "50": "#FAFAFA",
+        "100": "#F5F5F5",
+        "200": "#E5E5E5",
+        "300": "#D4D4D4",
+        "400": "#A3A3A3",
+        "500": "#737373",
+        "600": "#525252",
+        "700": "#404040",
+        "800": "#262626",
+        "900": "#171717"
+      },
+      "semantic": {
+        "success": "#10B981",
+        "warning": "#F59E0B",
+        "error": "#EF4444",
+        "info": "#3B82F6"
+      },
+      "gradients": [
+        {
+          "name": "primary",
+          "colors": [
+            "#F59E0B",
+            "#D97706"
+          ],
+          "direction": "to bottom right"
+        }
+      ]
+    },
+    "typography": {
+      "fontFamily": {
+        "heading": "System",
+        "body": "System",
+        "mono": "Courier"
+      },
+      "scale": {
+        "h1": {
+          "fontSize": 32,
+          "lineHeight": 40,
+          "fontWeight": "700"
+        },
+        "h2": {
+          "fontSize": 24,
+          "lineHeight": 32,
+          "fontWeight": "600"
+        },
+        "h3": {
+          "fontSize": 20,
+          "lineHeight": 28,
+          "fontWeight": "600"
+        },
+        "h4": {
+          "fontSize": 18,
+          "lineHeight": 24,
+          "fontWeight": "500"
+        },
+        "body": {
+          "fontSize": 16,
+          "lineHeight": 24,
+          "fontWeight": "400"
+        },
+        "bodySmall": {
+          "fontSize": 14,
+          "lineHeight": 20,
+          "fontWeight": "400"
+        },
+        "caption": {
+          "fontSize": 12,
+          "lineHeight": 16,
+          "fontWeight": "400"
+        },
+        "button": {
+          "fontSize": 16,
+          "lineHeight": 24,
+          "fontWeight": "600"
+        }
+      }
+    },
+    "spacing": {
+      "base": 4,
+      "scale": [
+        0,
+        4,
+        8,
+        12,
+        16,
+        20,
+        24,
+        32,
+        40,
+        48,
+        64
+      ]
+    },
+    "components": {
+      "buttons": {
+        "variants": [
+          "primary",
+          "secondary",
+          "outline",
+          "ghost",
+          "danger"
+        ],
+        "sizes": [
+          "sm",
+          "md",
+          "lg"
+        ],
+        "states": [
+          "default",
+          "hover",
+          "active",
+          "disabled",
+          "loading"
+        ]
+      },
+      "inputs": {
+        "variants": [
+          "default",
+          "filled",
+          "outlined"
+        ],
+        "sizes": [
+          "sm",
+          "md",
+          "lg"
+        ],
+        "states": [
+          "default",
+          "focus",
+          "error",
+          "disabled"
+        ]
+      },
+      "cards": {
+        "variants": [
+          "default",
+          "elevated",
+          "outlined",
+          "interactive"
+        ],
+        "sizes": [
+          "sm",
+          "md",
+          "lg"
+        ],
+        "states": [
+          "default",
+          "hover",
+          "selected"
+        ]
+      },
+      "lists": {
+        "variants": [
+          "default",
+          "compact",
+          "detailed"
+        ],
+        "sizes": [
+          "sm",
+          "md",
+          "lg"
+        ],
+        "states": [
+          "default",
+          "empty",
+          "loading"
+        ]
+      },
+      "modals": {
+        "variants": [
+          "default",
+          "fullscreen",
+          "bottom-sheet"
+        ],
+        "sizes": [
+          "sm",
+          "md",
+          "lg",
+          "full"
+        ],
+        "states": [
+          "open",
+          "closed"
+        ]
+      },
+      "navigation": {
+        "variants": [
+          "tabs",
+          "drawer",
+          "stack"
+        ],
+        "sizes": [
+          "default"
+        ],
+        "states": [
+          "active",
+          "inactive"
+        ]
+      },
+      "feedback": {
+        "variants": [
+          "toast",
+          "alert",
+          "snackbar",
+          "badge"
+        ],
+        "sizes": [
+          "sm",
+          "md"
+        ],
+        "states": [
+          "success",
+          "warning",
+          "error",
+          "info"
+        ]
+      }
+    },
+    "screens": [
+      {
+        "name": "Home",
+        "route": "/(tabs)/index",
+        "layout": "scroll",
+        "components": [
+          {
+            "type": "Header",
+            "variant": "default",
+            "props": {
+              "title": "BookBuddy"
+            },
+            "position": {
+              "x": 0,
+              "y": 0,
+              "width": "100%",
+              "height": "60"
+            }
+          },
+          {
+            "type": "Card",
+            "variant": "elevated",
+            "props": {
+              "title": "Welcome"
+            },
+            "position": {
+              "x": 16,
+              "y": 80,
+              "width": "calc(100% - 32px)",
+              "height": "auto"
+            }
+          }
+        ],
+        "interactions": [
+          {
+            "trigger": "onPress",
+            "action": "navigate",
+            "target": "/details"
+          }
+        ],
+        "dataBindings": [
+          {
+            "component": "Card",
+            "property": "data",
+            "source": "homeData"
+          }
+        ]
+      },
+      {
+        "name": "Profile",
+        "route": "/(tabs)/profile",
+        "layout": "scroll",
+        "components": [
+          {
+            "type": "Avatar",
+            "variant": "large",
+            "props": {},
+            "position": {
+              "x": 0,
+              "y": 0,
+              "width": "100",
+              "height": "100"
+            }
+          },
+          {
+            "type": "Form",
+            "variant": "default",
+            "props": {
+              "fields": [
+                "name",
+                "email",
+                "bio"
+              ]
+            },
+            "position": {
+              "x": 16,
+              "y": 120,
+              "width": "calc(100% - 32px)",
+              "height": "auto"
+            }
+          }
+        ],
+        "interactions": [
+          {
+            "trigger": "onSubmit",
+            "action": "updateProfile",
+            "target": "profileStore"
+          }
+        ],
+        "dataBindings": [
+          {
+            "component": "Avatar",
+            "property": "src",
+            "source": "user.avatar"
+          },
+          {
+            "component": "Form",
+            "property": "values",
+            "source": "user"
+          }
+        ]
+      },
+      {
+        "name": "Settings",
+        "route": "/(tabs)/settings",
+        "layout": "scroll",
+        "components": [
+          {
+            "type": "List",
+            "variant": "default",
+            "props": {
+              "items": [
+                "Notifications",
+                "Privacy",
+                "Theme",
+                "Help"
+              ]
+            },
+            "position": {
+              "x": 0,
+              "y": 0,
+              "width": "100%",
+              "height": "auto"
+            }
+          }
+        ],
+        "interactions": [
+          {
+            "trigger": "onPress",
+            "action": "navigate",
+            "target": "/settings/:item"
+          }
+        ],
+        "dataBindings": [
+          {
+            "component": "List",
+            "property": "items",
+            "source": "settingsItems"
+          }
+        ]
+      }
+    ],
+    "animations": {
+      "transitions": {
+        "duration": {
+          "fast": 150,
+          "normal": 300,
+          "slow": 500
+        },
+        "easing": {
+          "standard": "cubic-bezier(0.4, 0, 0.2, 1)",
+          "accelerate": "cubic-bezier(0.4, 0, 1, 1)",
+          "decelerate": "cubic-bezier(0, 0, 0.2, 1)"
+        }
+      },
+      "microInteractions": [
+        {
+          "name": "buttonPress",
+          "trigger": "onPressIn",
+          "animation": "scale(0.98)",
+          "duration": 100
+        },
+        {
+          "name": "cardHover",
+          "trigger": "onHoverIn",
+          "animation": "translateY(-2px)",
+          "duration": 200
+        },
+        {
+          "name": "fadeIn",
+          "trigger": "onMount",
+          "animation": "opacity 0->1",
+          "duration": 300
+        }
+      ]
+    },
+    "accessibility": {
+      "wcagLevel": "AA",
+      "colorContrast": {
+        "normal": 4.5,
+        "large": 3
+      },
+      "touchTargetSize": 44,
+      "screenReaderSupport": true,
+      "reduceMotionSupport": true
+    }
+  },
+  "qualityReport": {
+    "typescript": {
+      "passed": false,
+      "errors": [
+        {
+          "file": "C:\\Projects\\NewAgent\\output\\app_1766016834181\\src\\services\\database.ts",
+          "line": 23,
+          "column": 11,
+          "message": "Avoid using \"any\" type",
+          "severity": "warning"
+        },
+        {
+          "file": "C:\\Projects\\NewAgent\\output\\app_1766016834181\\src\\services\\database.ts",
+          "line": 311,
+          "column": 28,
+          "message": "Avoid using \"any\" type",
+          "severity": "warning"
+        }
+      ],
+      "warnings": []
+    },
+    "unitTests": {
+      "total": 264,
+      "passed": 264,
+      "failed": 0,
+      "skipped": 0,
+      "coverage": 100,
+      "duration": 0,
+      "failures": []
+    },
+    "integrationTests": {
+      "total": 0,
+      "passed": 0,
+      "failed": 0,
+      "skipped": 0,
+      "coverage": 0,
+      "duration": 0,
+      "failures": []
+    },
+    "e2eTests": {
+      "total": 0,
+      "passed": 0,
+      "failed": 0,
+      "skipped": 0,
+      "coverage": 0,
+      "duration": 0,
+      "failures": []
+    },
+    "performance": {
+      "bundleSize": 85718,
+      "startupTime": 585,
+      "memoryUsage": 214295,
+      "renderTime": {}
+    },
+    "accessibility": {
+      "score": 100,
+      "violations": [],
+      "warnings": []
+    },
+    "codeQuality": {
+      "lintErrors": 0,
+      "lintWarnings": 12,
+      "complexity": 4,
+      "duplication": 0,
+      "maintainability": 79
+    }
+  },
+  "securityAudit": {
+    "overallRisk": "medium",
+    "score": 60,
+    "vulnerabilities": [
+      {
+        "id": "VULN-1",
+        "category": "cryptography",
+        "severity": "low",
+        "title": "Math.random() used (not cryptographically secure)",
+        "description": "Found: \"Math.random()\"",
+        "file": "src\\stores\\appStore.ts",
+        "line": 161,
+        "cwe": "CWE-330",
+        "fix": "Use modern cryptographic algorithms (SHA-256+, crypto.getRandomValues())",
+        "verified": false
+      },
+      {
+        "id": "VULN-2",
+        "category": "cryptography",
+        "severity": "low",
+        "title": "Math.random() used (not cryptographically secure)",
+        "description": "Found: \"Math.random()\"",
+        "file": "src\\stores\\appStore.ts",
+        "line": 212,
+        "cwe": "CWE-330",
+        "fix": "Use modern cryptographic algorithms (SHA-256+, crypto.getRandomValues())",
+        "verified": false
+      },
+      {
+        "id": "VULN-3",
+        "category": "cryptography",
+        "severity": "low",
+        "title": "Math.random() used (not cryptographically secure)",
+        "description": "Found: \"Math.random()\"",
+        "file": "src\\stores\\appStore.ts",
+        "line": 240,
+        "cwe": "CWE-330",
+        "fix": "Use modern cryptographic algorithms (SHA-256+, crypto.getRandomValues())",
+        "verified": false
+      },
+      {
+        "id": "VULN-4",
+        "category": "cryptography",
+        "severity": "low",
+        "title": "Math.random() used (not cryptographically secure)",
+        "description": "Found: \"Math.random()\"",
+        "file": "src\\stores\\appStore.ts",
+        "line": 257,
+        "cwe": "CWE-330",
+        "fix": "Use modern cryptographic algorithms (SHA-256+, crypto.getRandomValues())",
+        "verified": false
+      },
+      {
+        "id": "VULN-5",
+        "category": "extraneous-functionality",
+        "severity": "low",
+        "title": "TODO/FIXME comment (incomplete implementation)",
+        "description": "Found: \"// TODO\"",
+        "file": "src\\utils\\helpers.ts",
+        "line": 1,
+        "cwe": "CWE-489",
+        "fix": "Remove debug code and console.log statements for production",
+        "verified": false
+      },
+      {
+        "severity": "medium",
+        "title": "RevenueCat API Key exposed in environment variable",
+        "description": "The RevenueCat API key is loaded from process.env.EXPO_PUBLIC_REVENUECAT_API_KEY. Environment variables prefixed with EXPO_PUBLIC_ are embedded in the client bundle and exposed to end users. While RevenueCat API keys are designed for client use, an empty string fallback could cause initialization to succeed with invalid credentials.",
+        "file": "src/services/revenueCat.service.ts",
+        "line": 17,
+        "cwe": "CWE-798",
+        "fix": "Add validation to throw an error if REVENUECAT_API_KEY is empty or undefined before attempting to configure the SDK. Example: if (!REVENUECAT_API_KEY) { throw new Error('EXPO_PUBLIC_REVENUECAT_API_KEY is required'); }",
+        "id": "AI-1",
+        "category": "code-quality",
+        "verified": false
+      },
+      {
+        "severity": "medium",
+        "title": "API URL not validated before axios client initialization",
+        "description": "While the code throws an error if EXPO_PUBLIC_API_URL is missing, it only checks for undefined/null, not for empty strings or malformed URLs. An empty string would pass the check but cause runtime failures.",
+        "file": "src/services/api.service.ts",
+        "line": 5,
+        "cwe": "CWE-20",
+        "fix": "Enhance validation: if (!API_URL || API_URL.trim().length === 0) { throw new Error('EXPO_PUBLIC_API_URL must be a valid URL'); }",
+        "id": "AI-2",
+        "category": "code-quality",
+        "verified": false
+      },
+      {
+        "severity": "low",
+        "title": "Supabase credentials not validated",
+        "description": "The Supabase client is initialized with empty string defaults for URL and ANON_KEY. While isSupabaseConfigured() checks for these values, the client is created lazily and could be accessed before validation occurs, potentially causing runtime errors or unexpected behavior.",
+        "file": "src/services/supabase.ts",
+        "line": 17,
+        "cwe": "CWE-20",
+        "fix": "Add validation in getSupabase() to throw an error if credentials are empty: if (!SUPABASE_URL || !SUPABASE_ANON_KEY) { throw new Error('Supabase credentials not configured'); }",
+        "id": "AI-3",
+        "category": "code-quality",
+        "verified": false
+      },
+      {
+        "severity": "low",
+        "title": "Potential timing attack in empty string checks",
+        "description": "The isSupabaseConfigured() function uses length checks on credential strings which could theoretically be exploited in timing attacks to determine if credentials are set, though the practical risk is minimal for client-side code.",
+        "file": "src/services/supabase.ts",
+        "line": 77,
+        "cwe": "CWE-208",
+        "fix": "While not critical for client-side code, consider using a more opaque check: return Boolean(SUPABASE_URL && SUPABASE_ANON_KEY)",
+        "id": "AI-4",
+        "category": "code-quality",
+        "verified": false
+      },
+      {
+        "severity": "low",
+        "title": "Error messages may leak sensitive information",
+        "description": "The handleError function in api.service.ts returns full error messages from the server, which could potentially leak sensitive implementation details to the client in error responses.",
+        "file": "src/services/api.service.ts",
+        "line": 83,
+        "cwe": "CWE-209",
+        "fix": "Consider sanitizing error messages in production to avoid leaking sensitive server details. Use generic messages for non-development environments while logging detailed errors server-side.",
+        "id": "AI-5",
+        "category": "code-quality",
+        "verified": false
+      }
+    ],
+    "compliance": [
+      {
+        "standard": "OWASP-M2",
+        "requirement": "Secure data storage with encryption",
+        "status": "pass",
+        "notes": "SecureStore detected for sensitive data"
+      },
+      {
+        "standard": "OWASP-M3",
+        "requirement": "HTTPS-only communication",
+        "status": "pass",
+        "notes": "All network calls use HTTPS"
+      },
+      {
+        "standard": "OWASP-M4",
+        "requirement": "Secure authentication implementation",
+        "status": "pass",
+        "notes": "Authentication handling detected"
+      },
+      {
+        "standard": "OWASP-M7",
+        "requirement": "Input validation and sanitization",
+        "status": "pass",
+        "notes": "Input validation libraries detected"
+      },
+      {
+        "standard": "OWASP-M7",
+        "requirement": "Proper error handling",
+        "status": "pass",
+        "notes": "Error handling implemented"
+      }
+    ],
+    "recommendations": [
+      {
+        "priority": "medium",
+        "category": "cryptography",
+        "recommendation": "Use strong cryptographic algorithms",
+        "implementation": "Replace MD5/SHA1 with SHA-256 or better; use crypto.getRandomValues() instead of Math.random()"
+      },
+      {
+        "priority": "low",
+        "category": "extraneous-functionality",
+        "recommendation": "Remove debug code before release",
+        "implementation": "Remove console.log, debugger statements, and test code from production builds"
+      },
+      {
+        "priority": "high",
+        "category": "code-quality",
+        "recommendation": "Remove dangerous code patterns",
+        "implementation": "Eliminate eval(), innerHTML, and dynamic code execution"
+      },
+      {
+        "priority": "medium",
+        "category": "general",
+        "recommendation": "Implement security headers for all API requests",
+        "implementation": "Add security headers in axios interceptors (X-Content-Type-Options, X-Frame-Options, etc.)"
+      }
+    ]
+  },
+  "iteration": 2,
+  "completenessReport": {
+    "overall": {
+      "score": 50,
+      "status": "warning"
+    },
+    "pageRelevance": {
+      "totalPages": 19,
+      "relevantPages": 13,
+      "irrelevantPages": [
+        "app\\(tabs)\\details.tsx",
+        "app\\forgot-password.tsx",
+        "app\\settings\\privacy.tsx",
+        "app\\settings\\sync.tsx",
+        "app\\settings\\units.tsx",
+        "app\\[...unmatched].tsx"
+      ],
+      "missingPages": [
+        "libraryscreen",
+        "contentscreen",
+        "progressscreen",
+        "notesscreen",
+        "settingsscreen"
+      ]
+    },
+    "settingsAudit": {
+      "settingsPages": [
+        "about",
+        "goals",
+        "notifications",
+        "privacy",
+        "profile",
+        "support",
+        "sync",
+        "units"
+      ],
+      "relevantSettings": [
+        "about",
+        "notifications",
+        "privacy",
+        "profile",
+        "support"
+      ],
+      "irrelevantSettings": [],
+      "missingSettings": [],
+      "menuItemsChecked": true
+    },
+    "supabaseAudit": {
+      "migrationExists": false,
+      "migrationPath": null,
+      "tables": [],
+      "rlsEnabled": false,
+      "rlsPolicies": [],
+      "missingTables": [
+        "supabase/migrations directory"
+      ]
+    },
+    "storagePatternAudit": {
+      "storeFiles": [
+        "appStore.ts",
+        "authStore.ts",
+        "index.ts",
+        "profileStore.ts",
+        "subscriptionStore.ts",
+        "useAppStore.ts"
+      ],
+      "localOnlyStores": [],
+      "syncEnabledStores": [
+        "appStore.ts",
+        "authStore.ts",
+        "profileStore.ts",
+        "subscriptionStore.ts"
+      ],
+      "servicesWithSupabase": [
+        "database.ts",
+        "supabase.ts"
+      ],
+      "servicesWithoutSupabase": [
+        "api.service.ts"
+      ]
+    },
+    "issues": [
+      {
+        "category": "page-relevance",
+        "severity": "warning",
+        "file": "app\\(tabs)\\details.tsx",
+        "message": "Page may not be relevant to app concept",
+        "suggestion": "Review page content and update to match app functionality"
+      },
+      {
+        "category": "page-relevance",
+        "severity": "warning",
+        "file": "app\\forgot-password.tsx",
+        "message": "Page may not be relevant to app concept",
+        "suggestion": "Review page content and update to match app functionality"
+      },
+      {
+        "category": "page-relevance",
+        "severity": "warning",
+        "file": "app\\settings\\privacy.tsx",
+        "message": "Page may not be relevant to app concept",
+        "suggestion": "Review page content and update to match app functionality"
+      },
+      {
+        "category": "page-relevance",
+        "severity": "warning",
+        "file": "app\\settings\\sync.tsx",
+        "message": "Page may not be relevant to app concept",
+        "suggestion": "Review page content and update to match app functionality"
+      },
+      {
+        "category": "page-relevance",
+        "severity": "warning",
+        "file": "app\\settings\\units.tsx",
+        "message": "Page may not be relevant to app concept",
+        "suggestion": "Review page content and update to match app functionality"
+      },
+      {
+        "category": "page-relevance",
+        "severity": "warning",
+        "file": "app\\[...unmatched].tsx",
+        "message": "Page may not be relevant to app concept",
+        "suggestion": "Review page content and update to match app functionality"
+      },
+      {
+        "category": "page-relevance",
+        "severity": "info",
+        "file": "libraryscreen",
+        "message": "Expected page 'libraryscreen' not found",
+        "suggestion": "Consider adding this page based on app features"
+      },
+      {
+        "category": "page-relevance",
+        "severity": "info",
+        "file": "contentscreen",
+        "message": "Expected page 'contentscreen' not found",
+        "suggestion": "Consider adding this page based on app features"
+      },
+      {
+        "category": "page-relevance",
+        "severity": "info",
+        "file": "progressscreen",
+        "message": "Expected page 'progressscreen' not found",
+        "suggestion": "Consider adding this page based on app features"
+      },
+      {
+        "category": "page-relevance",
+        "severity": "info",
+        "file": "notesscreen",
+        "message": "Expected page 'notesscreen' not found",
+        "suggestion": "Consider adding this page based on app features"
+      },
+      {
+        "category": "page-relevance",
+        "severity": "info",
+        "file": "settingsscreen",
+        "message": "Expected page 'settingsscreen' not found",
+        "suggestion": "Consider adding this page based on app features"
+      },
+      {
+        "category": "supabase",
+        "severity": "error",
+        "file": "supabase/migrations/",
+        "message": "No Supabase migration found",
+        "suggestion": "Create migration with app-specific tables and RLS policies"
+      },
+      {
+        "category": "supabase",
+        "severity": "warning",
+        "file": "supabase/migrations/",
+        "message": "Expected table 'supabase/migrations directory' not found in migration",
+        "suggestion": "Add table with appropriate schema and RLS policies"
+      }
+    ],
+    "fixes": []
+  },
+  "completedAt": "2025-12-18T00:39:06.661Z"
+}
