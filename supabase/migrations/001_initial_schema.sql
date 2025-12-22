@@ -312,6 +312,6 @@ CREATE TRIGGER update_bookshelves_updated_at BEFORE UPDATE ON bookshelves
 -- REGISTER BOOKBUDDY APP
 -- ============================================================================
 
-INSERT INTO app_registry (app_id, app_name)
-VALUES ('bookbuddy', 'BookBuddy')
+INSERT INTO app_registry (app_id, app_name, app_category)
+VALUES ('bookbuddy', 'BookBuddy', 'productivity')
 ON CONFLICT (app_id) DO NOTHING;

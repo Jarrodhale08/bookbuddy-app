@@ -5,27 +5,12 @@
 Last Updated: December 22, 2024
 
 ================================================================================
-FIRST: RUN DATABASE MIGRATION
+DATABASE MIGRATION - COMPLETED
 ================================================================================
 
-Before testing, you MUST run the Supabase migration to create the database
-schema. The migration file is at: supabase/migrations/001_initial_schema.sql
+[X] Migration has been run on Supabase Build project (kazhissaknwmagcribxq)
 
-OPTION 1: Via Supabase Dashboard (Recommended)
-    1. Log into https://supabase.com/dashboard
-    2. Select project: J&H Tech | Build
-    3. Go to SQL Editor
-    4. Copy/paste contents of supabase/migrations/001_initial_schema.sql
-    5. Click "Run" to execute
-    6. Verify tables created in Table Editor
-
-OPTION 2: Via Supabase CLI
-    1. Install CLI: npm install -g supabase
-    2. Login: supabase login
-    3. Link project: supabase link --project-ref kazhissaknwmagcribxq
-    4. Run migration: supabase db push
-
-Tables that will be created:
+Tables created:
     - app_registry (shared)
     - user_app_context (shared)
     - profiles (shared)
@@ -42,6 +27,8 @@ All app-isolated tables have:
     - app_id column for multi-tenant isolation
     - RLS policies for user data protection
     - Indexes for query performance
+
+BookBuddy is registered in app_registry with app_id='bookbuddy'
 
 ================================================================================
 REQUIRED - Must complete before App Store/Play Store submission
