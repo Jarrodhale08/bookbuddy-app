@@ -1,12 +1,10 @@
 /**
  * Database Service
- *
- * Generic CRUD operations for Supabase database.
- * Use these helpers for common database operations.
+ * Multi-tenant CRUD operations with automatic app_id filtering
  */
 
-import { supabase } from './supabase';
-import { PostgrestError, PostgrestFilterBuilder } from '@supabase/supabase-js';
+import { supabase, APP_ID } from './supabase';
+import { PostgrestError } from '@supabase/supabase-js';
 
 // ============================================================================
 // TYPES
@@ -22,6 +20,7 @@ export interface QueryOptions {
     operator: 'eq' | 'neq' | 'gt' | 'gte' | 'lt' | 'lte' | 'like' | 'ilike' | 'in' | 'contains';
     value: any;
   }>;
+  skipAppFilter?: boolean; // Use for shared tables like 'profiles'
 }
 
 export interface DatabaseResult<T> {
@@ -35,12 +34,15 @@ export interface DatabaseListResult<T> {
   count: number | null;
 }
 
+// Tables that should NOT have app_id filtering (shared tables)
+const SHARED_TABLES = ['profiles', 'app_registry', 'user_app_context'];
+
 // ============================================================================
-// GENERIC CRUD OPERATIONS
+// MULTI-TENANT CRUD OPERATIONS
 // ============================================================================
 
 /**
- * Fetch all records from a table with optional filtering
+ * Fetch all records from a table with automatic app_id filtering
  */
 export async function fetchAll<T>(
   table: string,
@@ -50,7 +52,12 @@ export async function fetchAll<T>(
     .from(table)
     .select(options.select || '*', { count: 'exact' });
 
-  // Apply filters
+  // Apply app_id filter for multi-tenant isolation
+  if (APP_ID && !options.skipAppFilter && !SHARED_TABLES.includes(table)) {
+    query = query.eq('app_id', APP_ID);
+  }
+
+  // Apply custom filters
   if (options.filters) {
     for (const filter of options.filters) {
       query = applyFilter(query, filter);
@@ -82,28 +89,38 @@ export async function fetchAll<T>(
 export async function fetchById<T>(
   table: string,
   id: string | number,
-  options: { select?: string; idColumn?: string } = {}
+  options: { select?: string; idColumn?: string; skipAppFilter?: boolean } = {}
 ): Promise<DatabaseResult<T>> {
-  const { data, error } = await supabase
+  let query = supabase
     .from(table)
     .select(options.select || '*')
-    .eq(options.idColumn || 'id', id)
-    .single();
+    .eq(options.idColumn || 'id', id);
 
+  // Apply app_id filter for multi-tenant isolation
+  if (APP_ID && !options.skipAppFilter && !SHARED_TABLES.includes(table)) {
+    query = query.eq('app_id', APP_ID);
+  }
+
+  const { data, error } = await query.single();
   return { data: data as T | null, error };
 }
 
 /**
- * Create a new record
+ * Create a new record with automatic app_id
  */
 export async function create<T>(
   table: string,
   record: Partial<T>,
-  options: { select?: string } = {}
+  options: { select?: string; skipAppFilter?: boolean } = {}
 ): Promise<DatabaseResult<T>> {
+  // Add app_id to record for multi-tenant tables
+  const recordWithAppId = (APP_ID && !options.skipAppFilter && !SHARED_TABLES.includes(table))
+    ? { ...record, app_id: APP_ID }
+    : record;
+
   const { data, error } = await supabase
     .from(table)
-    .insert(record)
+    .insert(recordWithAppId)
     .select(options.select || '*')
     .single();
 
@@ -111,16 +128,21 @@ export async function create<T>(
 }
 
 /**
- * Create multiple records
+ * Create multiple records with automatic app_id
  */
 export async function createMany<T>(
   table: string,
   records: Partial<T>[],
-  options: { select?: string } = {}
+  options: { select?: string; skipAppFilter?: boolean } = {}
 ): Promise<DatabaseListResult<T>> {
+  // Add app_id to all records for multi-tenant tables
+  const recordsWithAppId = (APP_ID && !options.skipAppFilter && !SHARED_TABLES.includes(table))
+    ? records.map(record => ({ ...record, app_id: APP_ID }))
+    : records;
+
   const { data, error } = await supabase
     .from(table)
-    .insert(records)
+    .insert(recordsWithAppId)
     .select(options.select || '*');
 
   return { data: data as T[] | null, error, count: data?.length ?? null };
@@ -133,15 +155,19 @@ export async function update<T>(
   table: string,
   id: string | number,
   updates: Partial<T>,
-  options: { select?: string; idColumn?: string } = {}
+  options: { select?: string; idColumn?: string; skipAppFilter?: boolean } = {}
 ): Promise<DatabaseResult<T>> {
-  const { data, error } = await supabase
+  let query = supabase
     .from(table)
     .update(updates)
-    .eq(options.idColumn || 'id', id)
-    .select(options.select || '*')
-    .single();
+    .eq(options.idColumn || 'id', id);
 
+  // Apply app_id filter for multi-tenant isolation
+  if (APP_ID && !options.skipAppFilter && !SHARED_TABLES.includes(table)) {
+    query = query.eq('app_id', APP_ID);
+  }
+
+  const { data, error } = await query.select(options.select || '*').single();
   return { data: data as T | null, error };
 }
 
@@ -152,11 +178,16 @@ export async function updateWhere<T>(
   table: string,
   updates: Partial<T>,
   filters: QueryOptions['filters'],
-  options: { select?: string } = {}
+  options: { select?: string; skipAppFilter?: boolean } = {}
 ): Promise<DatabaseListResult<T>> {
   let query = supabase
     .from(table)
     .update(updates);
+
+  // Apply app_id filter for multi-tenant isolation
+  if (APP_ID && !options.skipAppFilter && !SHARED_TABLES.includes(table)) {
+    query = query.eq('app_id', APP_ID);
+  }
 
   if (filters) {
     for (const filter of filters) {
@@ -174,13 +205,19 @@ export async function updateWhere<T>(
 export async function remove(
   table: string,
   id: string | number,
-  options: { idColumn?: string } = {}
+  options: { idColumn?: string; skipAppFilter?: boolean } = {}
 ): Promise<{ error: PostgrestError | null }> {
-  const { error } = await supabase
+  let query = supabase
     .from(table)
     .delete()
     .eq(options.idColumn || 'id', id);
 
+  // Apply app_id filter for multi-tenant isolation
+  if (APP_ID && !options.skipAppFilter && !SHARED_TABLES.includes(table)) {
+    query = query.eq('app_id', APP_ID);
+  }
+
+  const { error } = await query;
   return { error };
 }
 
@@ -189,9 +226,15 @@ export async function remove(
  */
 export async function removeWhere(
   table: string,
-  filters: QueryOptions['filters']
+  filters: QueryOptions['filters'],
+  options: { skipAppFilter?: boolean } = {}
 ): Promise<{ error: PostgrestError | null }> {
   let query = supabase.from(table).delete();
+
+  // Apply app_id filter for multi-tenant isolation
+  if (APP_ID && !options.skipAppFilter && !SHARED_TABLES.includes(table)) {
+    query = query.eq('app_id', APP_ID);
+  }
 
   if (filters) {
     for (const filter of filters) {
@@ -204,16 +247,21 @@ export async function removeWhere(
 }
 
 /**
- * Upsert (insert or update) a record
+ * Upsert (insert or update) a record with automatic app_id
  */
 export async function upsert<T>(
   table: string,
   record: Partial<T>,
-  options: { select?: string; onConflict?: string } = {}
+  options: { select?: string; onConflict?: string; skipAppFilter?: boolean } = {}
 ): Promise<DatabaseResult<T>> {
+  // Add app_id to record for multi-tenant tables
+  const recordWithAppId = (APP_ID && !options.skipAppFilter && !SHARED_TABLES.includes(table))
+    ? { ...record, app_id: APP_ID }
+    : record;
+
   const { data, error } = await supabase
     .from(table)
-    .upsert(record, { onConflict: options.onConflict })
+    .upsert(recordWithAppId, { onConflict: options.onConflict })
     .select(options.select || '*')
     .single();
 
@@ -225,7 +273,7 @@ export async function upsert<T>(
 // ============================================================================
 
 /**
- * Subscribe to table changes
+ * Subscribe to table changes (filtered by app_id)
  */
 export function subscribeToTable<T>(
   table: string,
@@ -234,17 +282,22 @@ export function subscribeToTable<T>(
     new: T | null;
     old: T | null;
   }) => void,
-  options: { event?: 'INSERT' | 'UPDATE' | 'DELETE' | '*'; filter?: string } = {}
+  options: { event?: 'INSERT' | 'UPDATE' | 'DELETE' | '*'; skipAppFilter?: boolean } = {}
 ) {
+  // Build filter for app_id
+  const filter = (!options.skipAppFilter && !SHARED_TABLES.includes(table) && APP_ID)
+    ? `app_id=eq.${APP_ID}`
+    : undefined;
+
   const channel = supabase
-    .channel(`${table}_changes`)
+    .channel(`${table}_changes_${APP_ID}`)
     .on(
       'postgres_changes',
       {
         event: options.event || '*',
         schema: 'public',
         table,
-        filter: options.filter,
+        filter,
       },
       (payload) => {
         callback({

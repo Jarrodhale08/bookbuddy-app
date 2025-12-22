@@ -1,13 +1,6 @@
 /**
  * Supabase Client Configuration
- *
- * This file initializes the Supabase client for your app.
- * Replace the placeholder values with your actual Supabase project credentials.
- *
- * To get your credentials:
- * 1. Go to https://supabase.com and create a project
- * 2. Go to Project Settings > API
- * 3. Copy the "Project URL" and "anon public" key
+ * Multi-tenant architecture with app_id isolation
  */
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -15,10 +8,13 @@ import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { AppState, AppStateStatus } from 'react-native';
 
 // ============================================================================
-// CONFIGURATION - Loaded from environment variables (set by AppForge)
+// CONFIGURATION - Loaded from environment variables
 // ============================================================================
 const SUPABASE_URL = process.env.EXPO_PUBLIC_SUPABASE_URL || '';
 const SUPABASE_ANON_KEY = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY || '';
+
+// Multi-tenant app identifier - CRITICAL for data isolation
+export const APP_ID = process.env.EXPO_PUBLIC_APP_ID || 'bookbuddy';
 
 // ============================================================================
 // LAZY CLIENT INITIALIZATION
@@ -82,6 +78,53 @@ export function cleanupAutoRefresh(): void {
 }
 
 // ============================================================================
+// MULTI-TENANT HELPERS
+// ============================================================================
+
+/**
+ * Initialize app context for the current user
+ * Call this after successful login to register user with this app
+ */
+export async function initializeAppContext(): Promise<void> {
+  const { data: { user } } = await getSupabase().auth.getUser();
+  if (!user) return;
+
+  try {
+    // Upsert user_app_context record
+    await getSupabase()
+      .from('user_app_context')
+      .upsert(
+        {
+          user_id: user.id,
+          app_id: APP_ID,
+          last_accessed_at: new Date().toISOString(),
+        },
+        { onConflict: 'user_id,app_id' }
+      );
+
+    // Ensure profile exists
+    await getSupabase()
+      .from('profiles')
+      .upsert(
+        {
+          id: user.id,
+          email: user.email,
+        },
+        { onConflict: 'id' }
+      );
+  } catch (error) {
+    console.warn('Failed to initialize app context:', error);
+  }
+}
+
+/**
+ * Get app-specific storage bucket name
+ */
+export function getAppBucket(bucketType: 'avatars' | 'covers' | 'uploads'): string {
+  return `${APP_ID}-${bucketType}`;
+}
+
+// ============================================================================
 // HELPER FUNCTIONS
 // ============================================================================
 
@@ -107,6 +150,50 @@ export async function getCurrentSession() {
     return null;
   }
   return session;
+}
+
+/**
+ * Get user's profile from the database
+ */
+export async function getUserProfile() {
+  const user = await getCurrentUser();
+  if (!user) return null;
+
+  const { data, error } = await getSupabase()
+    .from('profiles')
+    .select('*')
+    .eq('id', user.id)
+    .single();
+
+  if (error) {
+    console.warn('Failed to get user profile:', error);
+    return null;
+  }
+
+  return data;
+}
+
+/**
+ * Update user's profile
+ */
+export async function updateUserProfile(updates: {
+  display_name?: string;
+  avatar_url?: string;
+}) {
+  const user = await getCurrentUser();
+  if (!user) return { error: new Error('Not authenticated') };
+
+  const { data, error } = await getSupabase()
+    .from('profiles')
+    .update({
+      ...updates,
+      updated_at: new Date().toISOString(),
+    })
+    .eq('id', user.id)
+    .select()
+    .single();
+
+  return { data, error };
 }
 
 export default supabase;
