@@ -2,234 +2,335 @@
                     BOOKBUDDY - PRE-PUBLICATION CHECKLIST
 ================================================================================
 
-Last Updated: December 22, 2024
+App: BookBuddy - Your Reading Journey
+Version: 1.0.0
+Category: Productivity / Books
+Last Updated: December 23, 2024
+Audit Status: COMPLETE
 
 ================================================================================
-DATABASE MIGRATION - COMPLETED
+COMPLETED DURING AUDIT (December 23, 2024)
 ================================================================================
 
-[X] Migration has been run on Supabase Build project (kazhissaknwmagcribxq)
+[X] ONBOARDING SCREEN WITH 7-DAY FREE TRIAL
+    - app/onboarding.tsx created
+    - Shows 5 feature slides highlighting premium features
+    - "Start Free Trial" button opens RevenueCat paywall
+    - "Continue Free" option with upgrade prompt
+    - Auto-routes new users to onboarding before main app
+    - State persisted in AsyncStorage
 
-Tables created:
-    - app_registry (shared)
-    - user_app_context (shared)
-    - profiles (shared)
-    - books (app-isolated)
-    - notes (app-isolated)
-    - highlights (app-isolated)
-    - reading_sessions (app-isolated)
-    - reading_streaks (app-isolated)
-    - reading_goals (app-isolated)
-    - bookshelves (app-isolated)
-    - bookshelf_items (app-isolated)
+[X] PREMIUM FEATURES CONFIGURATION
+    - Updated src/config/premiumFeatures.ts
+    - Book-specific limits:
+      * Free: 10 books, 5 notes/book, 5 highlights/book, 3 shelves
+      * Premium: Unlimited everything
+    - Premium-only features:
+      * Cloud sync across devices
+      * Export data (CSV, JSON, PDF)
+      * Advanced statistics
+      * Page goals tracking
 
-All app-isolated tables have:
-    - app_id column for multi-tenant isolation
-    - RLS policies for user data protection
-    - Indexes for query performance
+[X] BOOK DETAIL PAGE (app/book/[id].tsx)
+    - Three-tab interface: Overview, Notes, Highlights
+    - Reading progress tracking with update modal
+    - Status badges (To Read, Reading, Finished, DNF)
+    - Book stats (added date, started, finished, rating)
+    - Notes:
+      * Add notes with optional page number
+      * Delete notes with confirmation
+      * Limit warning for free users
+    - Highlights:
+      * Add highlights with color picker (5 colors)
+      * Delete highlights with confirmation
+      * Limit warning for free users
+    - Premium gating on note/highlight limits
 
-BookBuddy is registered in app_registry with app_id='bookbuddy'
+[X] ADD BOOK SCREEN (app/book/add.tsx)
+    - Full form: title, author, pages, ISBN, category
+    - Category chips (Fiction, Non-Fiction, Sci-Fi, etc.)
+    - Status selection (To Read, Reading, Finished)
+    - Book limit warning for free users
+    - Premium upgrade prompt when limit reached
+
+[X] HOME SCREEN ENHANCEMENTS (app/(tabs)/index.tsx)
+    - Reading stats cards:
+      * Day Streak (flame icon)
+      * Books This Year (book icon)
+      * Total Books (library icon)
+    - Premium upgrade banner for free users
+    - "Currently Reading" section with progress bars
+    - "Up Next" section showing to-read books
+    - Floating action button to add books
+    - Pull-to-refresh with data sync
+
+[X] READING GOALS SETTINGS (app/settings/goals.tsx)
+    - Yearly book goal with progress visualization
+    - Progress card showing completion percentage
+    - Page goals (premium only)
+    - Daily pages target
+    - Integration with appStore.setReadingGoal()
+
+[X] APP ICON VERIFIED
+    - assets/images/icon.png (62 KB) - Orange gradient with book design
+    - assets/images/adaptive-icon.png (60 KB) - Android adaptive
+    - assets/images/splash.png (101 KB) - App splash screen
+    - assets/images/favicon.png (1.8 KB) - Web favicon
+    - assets/images/notification-icon.svg - Push notification icon
+
+[X] SUPABASE MULTI-TENANT CONFIGURATION
+    - supabase/migrations/001_initial_schema.sql complete
+    - Tables with app_id isolation:
+      * books, notes, highlights, reading_sessions
+      * reading_streaks, reading_goals, bookshelves, bookshelf_items
+      * user_settings
+    - Shared tables (no app_id):
+      * app_registry, user_app_context, profiles
+    - RLS policies on all tables
+    - Database service (src/services/database.ts):
+      * Auto-filters by app_id on queries
+      * Auto-adds app_id on create/upsert
+      * SHARED_TABLES array for exceptions
+    - BookBuddy registered: app_id='bookbuddy'
 
 ================================================================================
-REQUIRED - Must complete before App Store/Play Store submission
+REQUIRED - Must Complete Before App Store/Play Store Submission
 ================================================================================
 
 [ ] REVENUECAT SETUP
-    - Create account at https://revenuecat.com
-    - Create new project for BookBuddy
-    - Copy API key to .env as EXPO_PUBLIC_REVENUECAT_API_KEY
-    - See REVENUECAT_SETUP.md for detailed instructions
+    1. Create account at https://revenuecat.com
+    2. Create new project named "BookBuddy"
+    3. Get API key and add to .env:
+       EXPO_PUBLIC_REVENUECAT_API_KEY=your_api_key_here
+    4. See REVENUECAT_SETUP.md for detailed instructions
 
 [ ] APP STORE PRODUCTS (iOS)
-    - Log into App Store Connect
-    - Create auto-renewable subscription group
-    - Add products:
-      * Monthly subscription ($4.99/month)
-      * Yearly subscription ($39.99/year)
-    - Configure 7-day free trial on subscriptions
-    - Import products into RevenueCat
+    1. Log into App Store Connect
+    2. Go to Your App -> In-App Purchases
+    3. Create auto-renewable subscription group "BookBuddy Premium"
+    4. Create products:
+       - bookbuddy_monthly: $4.99/month
+       - bookbuddy_yearly: $39.99/year (33% savings)
+       - bookbuddy_lifetime: $99.99 (optional)
+    5. Configure 7-day free trial:
+       - Edit subscription -> Introductory Offers
+       - Add Free Trial: 7 days
 
 [ ] GOOGLE PLAY PRODUCTS (Android)
-    - Log into Google Play Console
-    - Navigate to Monetize > Subscriptions
-    - Create matching subscription products with same IDs as iOS
-    - Configure free trial offers
-    - Import products into RevenueCat
+    1. Log into Google Play Console
+    2. Go to Monetize -> Subscriptions
+    3. Create matching products:
+       - bookbuddy_monthly: $4.99/month
+       - bookbuddy_yearly: $39.99/year
+    4. Add free trial offer:
+       - Edit subscription -> Offers -> Free trial: 7 days
 
 [ ] REVENUECAT CONFIGURATION
-    - Create entitlement: "bookbuddy_pro"
-    - Attach all subscription products to the entitlement
-    - Create "default" Offering with Monthly/Yearly packages
-    - Design paywall using RevenueCat's visual Paywall Editor
-    - Attach paywall to default offering
+    1. Import products from App Store Connect
+    2. Import products from Google Play Console
+    3. Create Entitlement: "bookbuddy_pro"
+    4. Attach all subscription products to entitlement
+    5. Create "default" Offering with packages:
+       - Monthly package
+       - Yearly package
+       - Lifetime package (optional)
+    6. (Recommended) Design paywall in Paywall Editor
 
-[ ] SUPABASE AUTH CONFIGURATION
-    - Log into Supabase dashboard (https://supabase.com/dashboard)
-    - Select project: J&H Tech | Build
-    - Go to Authentication > Providers
-    - Enable Email/Password authentication
-    - Configure email templates (confirmation, password reset)
-    - (Optional) Enable social logins (Google, Apple)
+[ ] SUPABASE AUTH SETUP
+    1. Log into Supabase (https://supabase.com/dashboard)
+    2. Select Build project: kazhissaknwmagcribxq
+    3. Go to Authentication -> Providers
+    4. Enable Email/Password authentication
+    5. Configure email templates:
+       - Confirm signup email
+       - Password reset email
+       - Magic link email (optional)
+    6. (Optional) Enable OAuth providers:
+       - Google Sign-In
+       - Apple Sign-In
 
-[ ] UPDATE CONTACT EMAILS
-    - Replace placeholder emails in legal documents:
-      * app/settings/terms.tsx: support@bookbuddy.app
-      * app/settings/privacy.tsx: privacy@bookbuddy.app
-    - Set up actual email addresses or use your real contact info
+[ ] UPDATE LEGAL DOCUMENTS
+    Replace placeholder emails:
+    - app/settings/privacy.tsx: privacy@yourdomain.com
+    - app/settings/terms.tsx: legal@yourdomain.com
+    - app/settings/support.tsx: support@yourdomain.com
 
-[ ] APP STORE ASSETS
-    - App icon: Already created (1024x1024)
-    - Screenshots (required sizes):
-      * iPhone 6.7" (1290 x 2796)
-      * iPhone 6.5" (1284 x 2778)
-      * iPhone 5.5" (1242 x 2208)
-      * iPad Pro 12.9" (2048 x 2732)
-    - App preview video (optional but recommended)
-    - App description (short and full)
-    - Keywords for App Store optimization
-    - Privacy policy URL (host the policy online)
+[ ] APP STORE ASSETS - iOS
+    Screenshots (required):
+    - 6.7" Display: 1290 x 2796 px (iPhone 14 Pro Max)
+    - 6.5" Display: 1284 x 2778 px (iPhone 14 Plus)
+    - 5.5" Display: 1242 x 2208 px (iPhone 8 Plus)
+    - iPad Pro 12.9": 2048 x 2732 px
 
-[ ] GOOGLE PLAY ASSETS
-    - Feature graphic (1024 x 500)
-    - Screenshots for phone and tablet
-    - Short description (80 chars max)
-    - Full description (4000 chars max)
+    Metadata:
+    - App description (max 4000 chars)
+    - Keywords (max 100 chars)
+    - What's New text
+    - Support URL
+    - Privacy Policy URL
+    - App Store icon 1024x1024 (no alpha)
 
-[ ] EAS BUILD CONFIGURATION
-    - Run: npx eas build:configure
-    - Update eas.json with your Apple/Google credentials
-    - Configure code signing for iOS
-    - Configure keystore for Android
+[ ] GOOGLE PLAY ASSETS - Android
+    Graphics:
+    - Feature graphic: 1024 x 500 px
+    - Phone screenshots: min 2, max 8
+    - 7" tablet screenshots (optional)
+    - 10" tablet screenshots (optional)
+
+    Metadata:
+    - Short description (max 80 chars)
+    - Full description (max 4000 chars)
+    - Privacy Policy URL
+    - App category: Books & Reference
 
 ================================================================================
-RECOMMENDED - Important for quality release
+TESTING CHECKLIST
 ================================================================================
 
-[ ] TESTING
-    - Test book scanning/barcode functionality
-    - Test manual book entry
-    - Test reading progress tracking
-    - Test reading goal setting and tracking
-    - Test book shelves/collections
-    - Test search and filtering
-    - Test favorites and wishlist
-    - Test subscription flow with sandbox accounts
-    - Test login/signup/password reset flows
-    - Test reading statistics and charts
-    - Test push notifications on real devices
-    - Test offline functionality
-    - Test data sync when coming back online
+[ ] SANDBOX TESTING (iOS)
+    1. App Store Connect -> Users and Access -> Sandbox
+    2. Create sandbox tester account
+    3. Test on physical iOS device (not simulator)
+    4. Test purchase flow
+    5. Test restore purchases
+    6. Sandbox subscriptions renew faster for testing
 
-[ ] SANDBOX TESTING ACCOUNTS
-    - iOS: Add sandbox testers in App Store Connect > Users > Sandbox
-    - Android: Add license testers in Play Console > Setup > License testing
-    - Never use real payment methods during testing
+[ ] LICENSE TESTING (Android)
+    1. Play Console -> Setup -> License testing
+    2. Add test Gmail accounts
+    3. Test purchase flow on physical device
+    4. Test restore purchases
 
-[ ] PUSH NOTIFICATION CERTIFICATES
-    - iOS: Create APNs key in Apple Developer portal
-    - Android: Set up Firebase Cloud Messaging (FCM)
-    - Configure in Expo/EAS dashboard
+[ ] FUNCTIONALITY TESTING
+    - [ ] Onboarding flow shows for new users
+    - [ ] Skip onboarding works and persists
+    - [ ] Free trial purchase flow completes
+    - [ ] Premium features unlock after purchase
+    - [ ] Free user limits are enforced:
+          * Max 10 books
+          * Max 5 notes per book
+          * Max 5 highlights per book
+    - [ ] Upgrade prompts show when limits reached
+    - [ ] Books can be added, viewed, edited, deleted
+    - [ ] Reading progress updates correctly
+    - [ ] Notes can be added and deleted
+    - [ ] Highlights can be added with colors
+    - [ ] Reading streak updates on activity
+    - [ ] Goals can be set and saved
+    - [ ] Data syncs to Supabase
+    - [ ] Offline mode (data cached locally)
+    - [ ] Login/signup/password reset work
+    - [ ] Settings pages function correctly
 
-[ ] APP PRIVACY DETAILS (App Store)
-    - Complete App Privacy questionnaire in App Store Connect
-    - Document all data collection practices
-    - Match with Privacy Policy content
-
-[ ] DATA SAFETY FORM (Google Play)
-    - Complete Data Safety form in Play Console
-    - Document all data collection and sharing practices
+[ ] PREMIUM FEATURE TESTING
+    - [ ] Unlimited books (no limit warning)
+    - [ ] Unlimited notes/highlights
+    - [ ] Cloud sync across devices
+    - [ ] Page goals can be set
+    - [ ] Customer center shows subscription
 
 ================================================================================
 PRODUCTION DEPLOYMENT
 ================================================================================
 
-[ ] MIGRATE TO PRODUCTION SUPABASE (after testing complete)
-    1. Run the same migration SQL on Production project:
+[ ] MIGRATE TO PRODUCTION SUPABASE
+    After all testing is complete:
+
+    1. Run migration on Production project (aweahqgyrthpdxrnzaoi):
        - Log into Supabase dashboard
-       - Select project: J&H Tech | Production
-       - Go to SQL Editor
-       - Run supabase/migrations/001_initial_schema.sql
+       - Select Production project
+       - SQL Editor -> Run 001_initial_schema.sql
+
     2. Update .env with Production credentials:
-       * EXPO_PUBLIC_SUPABASE_URL=https://aweahqgyrthpdxrnzaoi.supabase.co
-       * EXPO_PUBLIC_SUPABASE_ANON_KEY=[production key]
-    3. Verify RLS policies are working in Production
-    4. Configure Auth providers in Production project
+       EXPO_PUBLIC_SUPABASE_URL=https://aweahqgyrthpdxrnzaoi.supabase.co
+       EXPO_PUBLIC_SUPABASE_ANON_KEY=[production_anon_key]
+
+    3. Configure Auth in Production project
+    4. Test authentication flow
+    5. Test data operations
+
+[ ] EAS BUILD CONFIGURATION
+    npm install -g eas-cli
+    eas login
+    eas build:configure
+
+    Update eas.json with credentials:
+    - iOS: Apple Developer account
+    - Android: Google Play keystore
 
 [ ] BUILD FOR PRODUCTION
-    - iOS: npx eas build --platform ios --profile production
-    - Android: npx eas build --platform android --profile production
+    iOS:
+    eas build --platform ios --profile production
+
+    Android:
+    eas build --platform android --profile production
 
 [ ] SUBMIT TO STORES
-    - iOS: npx eas submit --platform ios
-    - Android: npx eas submit --platform android
-    - Or upload manually through App Store Connect / Play Console
+    iOS:
+    eas submit --platform ios
+
+    Android:
+    eas submit --platform android
 
 ================================================================================
 POST-LAUNCH
 ================================================================================
 
-[ ] MONITOR
-    - Set up RevenueCat webhooks for subscription events
-    - Monitor Supabase dashboard for errors
-    - Set up crash reporting (Sentry, Bugsnag, etc.)
-    - Monitor app reviews and respond promptly
+[ ] MONITORING
+    - RevenueCat dashboard: Track revenue, subscribers, churn
+    - Supabase dashboard: Monitor database usage, errors
+    - App Store Connect Analytics: Downloads, sessions, retention
+    - Google Play Console Statistics: Installs, ratings, crashes
 
-[ ] ANALYTICS (Optional)
-    - Integrate analytics service (Mixpanel, Amplitude, etc.)
-    - Track key user events and conversion funnels
+[ ] CRASH REPORTING (Recommended)
+    - Integrate Sentry or Bugsnag
+    - Monitor and fix crashes promptly
 
-================================================================================
-CURRENT STATUS
-================================================================================
+[ ] USER SUPPORT
+    - Monitor App Store and Play Store reviews
+    - Respond to user feedback quickly
+    - Track common issues and feature requests
 
-+ Core app functionality complete
-+ Supabase backend configured (Build project)
-+ Database migration with full schema and RLS policies
-+ Multi-tenant architecture with app_id isolation
-+ Push notification infrastructure (expo-notifications)
-+ RevenueCat service code integrated
-+ Privacy Policy and Terms of Service
-+ Open Source Licenses page
-+ App icons and splash screen
-+ Notification icon created
-+ Auth initialization with app context
-+ Sync-enabled data store
+[ ] ITERATION
+    - Plan updates based on user feedback
+    - A/B test paywall designs in RevenueCat
+    - Improve conversion rates
 
 ================================================================================
-PREMIUM FEATURES (Gated by Subscription)
+ARCHITECTURE REFERENCE
 ================================================================================
 
-- Unlimited book library (free: 25 books)
-- Advanced reading statistics
-- Custom reading goals
-- Book recommendations
-- Cloud sync across devices
-- Export reading history
-- Multiple reading lists
-- Reading challenges
+Bundle Identifiers:
+- iOS: com.bookbuddy.app
+- Android: com.bookbuddy.app
+- URL Scheme: bookbuddy
 
-================================================================================
-ARCHITECTURE NOTES
-================================================================================
+Entitlement ID: bookbuddy_pro
+
+Key Files Added During Audit:
+- app/onboarding.tsx - Trial onboarding screen
+- app/book/[id].tsx - Book detail page
+- app/book/add.tsx - Add book screen
+- src/hooks/useOnboardingCheck.ts - Onboarding state hook
+
+Key Files Modified During Audit:
+- app/(tabs)/index.tsx - Enhanced home screen
+- app/_layout.tsx - Onboarding routing
+- app/settings/goals.tsx - Reading goals with progress
+- src/config/premiumFeatures.ts - Book-specific premium config
 
 Multi-Tenant Setup:
-- APP_ID = "bookbuddy" (set in .env)
-- All data tables have app_id column
-- database.ts auto-filters queries by app_id
-- database.ts auto-adds app_id on create/upsert
-- SHARED_TABLES (profiles, app_registry) skip app_id filter
+- APP_ID: "bookbuddy" (EXPO_PUBLIC_APP_ID in .env)
+- Build Supabase: kazhissaknwmagcribxq
+- Production Supabase: aweahqgyrthpdxrnzaoi
 
-Data Flow:
-- appStore.ts is the main data store
-- Uses Supabase as primary storage
-- AsyncStorage for offline caching
-- syncAll() fetches all data on login
-- Individual CRUD operations sync immediately
+Support Resources:
+- RevenueCat: https://docs.revenuecat.com
+- Expo: https://docs.expo.dev
+- Supabase: https://supabase.com/docs
+- REVENUECAT_SETUP.md - In-app purchase setup guide
+- SUPABASE_SETUP.md - Database setup guide
 
-Auth Flow:
-- authStore.ts handles Supabase auth
-- On login/signup, calls initializeAppContext()
-- Creates user_app_context record for multi-tenant tracking
-- Creates/updates profiles record
-
+================================================================================
+                         END OF PRE-PUBLICATION CHECKLIST
 ================================================================================
